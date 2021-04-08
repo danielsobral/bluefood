@@ -48,19 +48,19 @@
 						</div><br>
 						
 						<label for="logotipo">Logotipo: </label><br>	
-						<input type="file" id="logotipo" name="logotipo" placeholder="Selecionar..." th:field="*{logotipo}" th:classappend="${#fields.hasErrors('logotipo') ? 'inputError' : ''}"><br><br>
+						<input type="file" id="logotipo" name="logotipo" placeholder="Selecionar..." th:field="*{logotipoFile}" th:classappend="${#fields.hasErrors('logotipo') ? 'inputError' : ''}"><br><br>
 						<div id="mensagemDeErro" th:if="${#fields.hasErrors('logotipo')}">
 							<span th:errors="*{logotipo}"></span>
 						</div><br>
 						
 						<label for="logotipo">Taxa de Entrega: </label><br>	
-						<input type="text" id="taxaEntrega" name="taxaEntrega" placeholder="Taxa..." th:field="*{taxaEntrega}" th:classappend="${#fields.hasErrors('taxaEntrega') ? 'inputError' : ''}"><br><br>
+						<input type="text" id="taxaEntrega" name="taxaEntrega" placeholder="Taxa..." th:field="*{taxaEntrega}" th:classappend="${#fields.hasErrors('taxaEntrega') ? 'inputError' : ''}" onkeydown="return isNumberKey(event);"><br><br>
 						<div id="mensagemDeErro" th:if="${#fields.hasErrors('taxaEntrega')}">
 							<span th:errors="*{taxaEntrega}"></span>
 						</div><br>
 						
 						<label for="logotipo">Tempo de entrega (min.): </label><br>	
-						<input type="text" id="tempoEntregabase" name="tempoEntregabase" placeholder="Tempo..." th:field="*{tempoEntregabase}" th:classappend="${#fields.hasErrors('tempoEntregabase') ? 'inputError' : ''}"><br><br>
+						<input type="text" id="tempoEntregabase" name="tempoEntregabase" placeholder="Tempo..." th:field="*{tempoEntregabase}" th:classappend="${#fields.hasErrors('tempoEntregabase') ? 'inputError' : ''}" onkeydown="return isNumberKey(event);"><br><br>
 						<div id="mensagemDeErro" th:if="${#fields.hasErrors('tempoEntregabase')}">
 							<span th:errors="*{tempoEntregabase}"></span>
 						</div><br>
