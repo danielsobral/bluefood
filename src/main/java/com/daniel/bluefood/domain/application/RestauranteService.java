@@ -12,6 +12,9 @@ public class RestauranteService {
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	private Imageservice imageservice;
 
 	public void saveRestaurante(Restaurante restaurante) throws ValidationException {
 
@@ -28,7 +31,7 @@ public class RestauranteService {
 			restaurante.ecncryptPassword();
 			restaurante = restauranteRepository.save(restaurante);
 			restaurante.setLogotipoFileName();
-			//TODO Upload!!
+			imageservice.uploadLogotipo(restaurante.getLogotipoFile(), restaurante.getLogotipo());
 		}
 
 	}

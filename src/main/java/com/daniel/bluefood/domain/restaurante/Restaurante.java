@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.daniel.bluefood.domain.usuario.Usuario;
+import com.daniel.bluefood.util.FileType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -71,7 +72,7 @@ public class Restaurante extends Usuario {
 			throw new IllegalStateException("É preciso primeiro gravar o registro");
 		}
 		
-		//TODO trocar a forma de ler a extenção
-		this.logotipo = String.format("%04d-logo.%S", getId(), ".png");
+	
+		this.logotipo = String.format("%04d-logo.%S", getId(), FileType.of(logotipoFile.getContentType()).getExtension());
 	}
 }
