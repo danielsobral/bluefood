@@ -1,5 +1,5 @@
 # bluefood
-projeto realizado junto ao curso Master Developer da SoftBlue (o projeto ainda em processo de desenvolvimento)
+projeto realizado junto ao curso Master Developer da SoftBlue, o projeto ainda em processo de desenvolvimento.
  As tecnologias utilizadas são:
  
  - Spring Boot
