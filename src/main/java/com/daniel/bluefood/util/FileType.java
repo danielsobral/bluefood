@@ -21,7 +21,7 @@ public enum FileType {
 		return extension;
 	}
 	
-	public boolean sameOf(String mimType) {
+	public boolean sameOf(String mimeType) {
 		return this.mimeType.equalsIgnoreCase(mimeType);
 	}
 	
