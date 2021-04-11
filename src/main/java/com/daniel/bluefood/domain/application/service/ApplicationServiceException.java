@@ -1,4 +1,4 @@
-package com.daniel.bluefood.domain.application;
+package com.daniel.bluefood.domain.application.service;
 
 @SuppressWarnings("serial")
 public class ApplicationServiceException extends RuntimeException {

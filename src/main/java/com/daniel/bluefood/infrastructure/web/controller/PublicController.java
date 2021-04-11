@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.daniel.bluefood.domain.application.ClienteService;
-import com.daniel.bluefood.domain.application.RestauranteService;
-import com.daniel.bluefood.domain.application.ValidationException;
+import com.daniel.bluefood.domain.application.service.ClienteService;
+import com.daniel.bluefood.domain.application.service.RestauranteService;
+import com.daniel.bluefood.domain.application.service.ValidationException;
 import com.daniel.bluefood.domain.cliente.Cliente;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestauranteRepository;
 import com.daniel.bluefood.domain.restaurante.Restaurante;
@@ -81,6 +81,7 @@ public class PublicController {
 			}
 		}
 		ControllerHelper.isEditMode(model, false);
+		ControllerHelper.addCategoriasToRequest(categoriaRestauranteRepository, model);
 		return "restaurante-cadastro";
 	}
 }
