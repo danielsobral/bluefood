@@ -1,8 +1,11 @@
 package com.daniel.bluefood.infrastructure.web.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -15,6 +18,8 @@ import com.daniel.bluefood.domain.application.service.ClienteService;
 import com.daniel.bluefood.domain.application.service.ValidationException;
 import com.daniel.bluefood.domain.cliente.Cliente;
 import com.daniel.bluefood.domain.cliente.ClienteRepository;
+import com.daniel.bluefood.domain.restaurante.CategoriaRestaurante;
+import com.daniel.bluefood.domain.restaurante.CategoriaRestauranteRepository;
 import com.daniel.bluefood.util.SecurityUtils;
 
 @Controller
@@ -26,9 +31,17 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteService clienteService;
+	
+	@Autowired
+	private CategoriaRestauranteRepository categoriaRestauranteRepository;
 
 	@GetMapping(path = "/home")
-	public String home() {
+	public String home(Model model) {
+		
+		List<CategoriaRestaurante> categorias = categoriaRestauranteRepository.findAll(Sort.by("nome"));
+		
+		model.addAttribute("categorias", categorias);
+		
 		return "cliente-home";
 	}
 	

@@ -16,7 +16,7 @@ public class RestauranteService {
 	private RestauranteRepository restauranteRepository;
 	
 	@Autowired
-	private Imageservice imageservice;
+	private ImageService imageservice;
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
