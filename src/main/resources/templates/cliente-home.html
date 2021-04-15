@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+	
+		<div layout:fragment="content">
+			
+			<div>
+				<h1>É hora de rangar!</h1>
+				<form method="get" action="clienteBusca.html">
+					<fieldset>
+						<input type="text" name="email" placeholder="Buscar por...">
+						<input type="submit" value="Procurar">
+					</fieldset>
+				</form>
+				<br>
+			</div>
+			
+			<div id="divCategoriasComidaGeral">
+				<div id="divCategoriasComidaOpcao">
+					<a href="#">
+					<img src="images/sys_categoriaChurrasco.png" id="imgCategoriaComida"><br>
+					<span>Churrasco</span>
+					</a>
+				</div>
+				
+				<div id="divCategoriasComidaOpcao">
+					<a href="#">
+					<img src="images/sys_categoriaHamburguer.png" id="imgCategoriaComida"><br>
+					<span>Hamburguer</span>
+					</a>
+				</div>
+				
+				<div id="divCategoriasComidaOpcao">
+					<a href="#">
+					<img src="images/sys_categoriaPizza.png" id="imgCategoriaComida"><br>
+					<span>Pizza</span>
+					</a>
+				</div>
+				
+				<div id="divCategoriasComidaOpcao">
+					<a href="#">
+					<img src="images/sys_categoriaSalada.png" id="imgCategoriaComida"><br>
+					<span>Salada</span>
+					</a>
+				</div>
+				
+				<div id="divCategoriasComidaOpcao">
+					<a href="#">
+					<img src="images/sys_categoriaSobremesa.png" id="imgCategoriaComida"><br>
+					<span>Sobremesa</span>
+					</a>
+				</div>
+			</div>
+			
+			<div>
+				<h1>Últimos pedidos</h1>
+				<input type="button" value="#15124 McBlunalds" onClick="location.href='clientePedido.html';"><br>
+				<input type="button" value="#35464 Blue Pizza" onClick="location.href='clientePedido.html';"><br>
+				<input type="button" value="#38754 Hard Blue" onClick="location.href='clientePedido.html';"><br>
+			</div>
+			
+			<div>
+				<h1>Conta</h1>
+				<input type="button" value="Meus dados" th:onClick="'location.href=\'' + @{/cliente/edit} + '\';'">
+				<input type="button" value="Sair" th:onClick="'location.href=\'' + @{/logout} + '\';'">
+			</div>
+		</div>
+	</body>
+</html>
+
