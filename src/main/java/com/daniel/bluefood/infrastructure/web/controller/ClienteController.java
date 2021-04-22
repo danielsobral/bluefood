@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.daniel.bluefood.domain.application.service.ClienteService;
+import com.daniel.bluefood.domain.application.service.RestauranteService;
 import com.daniel.bluefood.domain.application.service.ValidationException;
 import com.daniel.bluefood.domain.cliente.Cliente;
 import com.daniel.bluefood.domain.cliente.ClienteRepository;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestaurante;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestauranteRepository;
+import com.daniel.bluefood.domain.restaurante.Restaurante;
+import com.daniel.bluefood.domain.restaurante.SearchFilter;
 import com.daniel.bluefood.util.SecurityUtils;
 
 @Controller
@@ -34,6 +37,9 @@ public class ClienteController {
 	
 	@Autowired
 	private CategoriaRestauranteRepository categoriaRestauranteRepository;
+	
+	@Autowired
+	private RestauranteService restauranteService;
 
 	@GetMapping(path = "/home")
 	public String home(Model model) {
@@ -41,6 +47,7 @@ public class ClienteController {
 		List<CategoriaRestaurante> categorias = categoriaRestauranteRepository.findAll(Sort.by("nome"));
 		
 		model.addAttribute("categorias", categorias);
+		model.addAttribute("searchFilter", new SearchFilter());
 		
 		return "cliente-home";
 	}
@@ -76,5 +83,19 @@ public class ClienteController {
 		ControllerHelper.isEditMode(model, true);
 		
 		return "cliente-cadastro";
+	}
+	
+	@GetMapping(path = "/search")
+	public String search(@ModelAttribute("searchFilter") SearchFilter filter,
+			Model model
+			) {
+		
+		List<Restaurante> restaurantes = restauranteService.serach(filter);
+		
+		model.addAttribute("restaurantes", restaurantes);
+		
+		ControllerHelper.addCategoriasToRequest(categoriaRestauranteRepository, model);
+		
+		return "cliente-busca";
 	}
 }

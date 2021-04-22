@@ -7,9 +7,9 @@
 			
 			<div>
 				<h1>É hora de rangar!</h1>
-				<form method="get" action="clienteBusca.html">
+				<form method="get" th:object="${searchFilter}" th:action="@{/cliente/search}">
 					<fieldset>
-						<input type="text" name="email" placeholder="Buscar por...">
+						<input type="text" th:field="*{texto}" placeholder="Buscar por...">
 						<input type="submit" value="Procurar">
 					</fieldset>
 				</form>

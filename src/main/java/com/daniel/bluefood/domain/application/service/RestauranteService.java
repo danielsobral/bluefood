@@ -1,5 +1,7 @@
 package com.daniel.bluefood.domain.application.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +10,7 @@ import com.daniel.bluefood.domain.cliente.Cliente;
 import com.daniel.bluefood.domain.cliente.ClienteRepository;
 import com.daniel.bluefood.domain.restaurante.Restaurante;
 import com.daniel.bluefood.domain.restaurante.RestauranteRepository;
+import com.daniel.bluefood.domain.restaurante.SearchFilter;
 
 @Service
 public class RestauranteService {
@@ -64,6 +67,11 @@ public class RestauranteService {
 		}
 
 		return true;
+	}
+	
+	public List<Restaurante> serach(SearchFilter filter){
+		//TODO considerar criterios de filtragem
+		return restauranteRepository.findAll();
 	}
 
 }
