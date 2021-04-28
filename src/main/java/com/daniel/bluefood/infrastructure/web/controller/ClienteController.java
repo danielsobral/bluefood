@@ -90,11 +90,15 @@ public class ClienteController {
 			Model model
 			) {
 		
+		filter.processFilter();
+		
 		List<Restaurante> restaurantes = restauranteService.serach(filter);
 		
 		model.addAttribute("restaurantes", restaurantes);
 		
 		ControllerHelper.addCategoriasToRequest(categoriaRestauranteRepository, model);
+		
+		model.addAttribute("searchFilter", filter);
 		
 		return "cliente-busca";
 	}

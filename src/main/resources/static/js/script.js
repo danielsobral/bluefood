@@ -1,5 +1,6 @@
 //Validação de campo numérico
 //https://www.ime.usp.br/~kellyrb/mac2166_2015/tabela_ascii.html
+
 function isNumberKey (evt){
 	var charCode = (evt.which) ? evt.which : evt.keyCode;
 	
@@ -8,4 +9,19 @@ function isNumberKey (evt){
 	}
 	
 	return false; 
+}
+
+function searchRest(categoriaId) {
+
+	var t = document.getElementById("searchType");
+
+	if(categoriaId == null){
+		t.value = "Texto";
+		
+	} else {
+		t.value = "Categoria";
+		document.getElementById("categoriaId").value = categoriaId;
+	}
+
+	document.getElementById("form").submit();
 }

@@ -11,6 +11,7 @@ import com.daniel.bluefood.domain.cliente.ClienteRepository;
 import com.daniel.bluefood.domain.restaurante.Restaurante;
 import com.daniel.bluefood.domain.restaurante.RestauranteRepository;
 import com.daniel.bluefood.domain.restaurante.SearchFilter;
+import com.daniel.bluefood.domain.restaurante.SearchFilter.SearchType;
 
 @Service
 public class RestauranteService {
@@ -70,8 +71,21 @@ public class RestauranteService {
 	}
 	
 	public List<Restaurante> serach(SearchFilter filter){
-		//TODO considerar criterios de filtragem
-		return restauranteRepository.findAll();
+		List<Restaurante> restaurantes;
+		
+		if (filter.getSearchType() == SearchType.Texto) {
+			
+			restaurantes = restauranteRepository.findByNomeIgnoreCaseContaining(filter.getTexto());
+		
+		} else if (filter.getSearchType() == SearchType.Categoria) {
+			
+			restaurantes = restauranteRepository.findByCategorias_Id(filter.getCategoriaId());
+		} else {
+			
+			throw new IllegalStateException("O tipo de buscar " + filter.getSearchType() + " não é suportado");
+		}
+		
+		return restaurantes;
 	}
 
 }
