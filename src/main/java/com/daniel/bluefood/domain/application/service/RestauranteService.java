@@ -1,5 +1,6 @@
 package com.daniel.bluefood.domain.application.service;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.daniel.bluefood.domain.cliente.Cliente;
 import com.daniel.bluefood.domain.cliente.ClienteRepository;
 import com.daniel.bluefood.domain.restaurante.Restaurante;
+import com.daniel.bluefood.domain.restaurante.RestauranteComparator;
 import com.daniel.bluefood.domain.restaurante.RestauranteRepository;
 import com.daniel.bluefood.domain.restaurante.SearchFilter;
 import com.daniel.bluefood.domain.restaurante.SearchFilter.SearchType;
+import com.daniel.bluefood.util.SecurityUtils;
 
 @Service
 public class RestauranteService {
@@ -84,6 +87,21 @@ public class RestauranteService {
 			
 			throw new IllegalStateException("O tipo de buscar " + filter.getSearchType() + " não é suportado");
 		}
+		
+		Iterator<Restaurante> it = restaurantes.iterator();
+		
+		while (it.hasNext()) {
+			Restaurante restaurante = it.next();
+			double taxaEntrega = restaurante.getTaxaEntrega().doubleValue();
+			
+			if (filter.isEntregaGratis() && taxaEntrega > 0 || 
+					!filter.isEntregaGratis() && taxaEntrega == 0) {
+				it.remove();
+			}
+		}
+		
+		RestauranteComparator comparator = new RestauranteComparator(filter, SecurityUtils.loggedCliente().getCep());
+		restaurantes.sort(comparator);
 		
 		return restaurantes;
 	}

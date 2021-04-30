@@ -44,55 +44,67 @@ public class Restaurante extends Usuario {
 	@Pattern(regexp = "[0-9]{14}", message = "O valor do CNPJ é invalido")
 	@Column(length = 14, nullable = false)
 	private String cnpj;
-	
+
 	@Size(max = 80)
 	private String logotipo;
-	@UploadConstraint(acceptedTypes = {FileType.PNG, FileType.JPG})
+	@UploadConstraint(acceptedTypes = { FileType.PNG, FileType.JPG })
 	private transient MultipartFile logotipoFile;
-	
+
 	@NotNull(message = "A taxa de entrega não pode ser vazia")
 	@Min(0)
 	@Max(99)
 	private BigDecimal taxaEntrega;
-	
+
 	@NotNull(message = "O tempo de entrega não pode ser vazio")
 	@Min(0)
 	@Max(120)
 	private Integer tempoEntregabase;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-			name = "restaurante_has_categoria",
-			joinColumns = @JoinColumn(name = "restaurante_id"),
-			inverseJoinColumns = @JoinColumn(name = "categoria_restaurante_id")
-	)
+	@JoinTable(name = "restaurante_has_categoria", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "categoria_restaurante_id"))
 	@Size(min = 1, message = "selecione pelo menos uma categoria")
 	@ToString.Exclude
 	private Set<CategoriaRestaurante> categorias = new HashSet<>(0);
-	
+
 	@OneToMany(mappedBy = "restaurante")
 	private Set<ItemCardapio> itensCardapio = new HashSet<>(0);
-	
+
 	public void setLogotipoFileName() {
-		
+
 		if (getId() == null) {
-			
+
 			throw new IllegalStateException("É preciso primeiro gravar o registro");
 		}
-		
-	
-		this.logotipo = String.format("%04d-logo.%S", getId(), FileType.of(logotipoFile.getContentType()).getExtension());
+
+		this.logotipo = String.format("%04d-logo.%S", getId(),
+				FileType.of(logotipoFile.getContentType()).getExtension());
 	}
-	
+
 	public String getCategoriaAsText() {
-		
+
 		Set<String> strings = new LinkedHashSet<>();
-		
-		for(CategoriaRestaurante categoria : categorias) {
-			
+
+		for (CategoriaRestaurante categoria : categorias) {
+
 			strings.add(categoria.getNome());
 		}
-		
+
 		return StringUtils.concatenation(strings);
+	}
+
+	public Integer calcularTempoEntrega(String cep) {
+		int soma = 0;
+
+		for (char c : cep.toCharArray()) {
+			int v = Character.getNumericValue(c);
+
+			if (v > 0) {
+				soma += v;
+			}
+		}
+
+		soma /= 2;
+
+		return tempoEntregabase + soma;
 	}
 }
