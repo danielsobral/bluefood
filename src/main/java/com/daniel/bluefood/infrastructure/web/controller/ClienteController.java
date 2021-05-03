@@ -23,56 +23,57 @@ import com.daniel.bluefood.domain.cliente.ClienteRepository;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestaurante;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestauranteRepository;
 import com.daniel.bluefood.domain.restaurante.Restaurante;
+import com.daniel.bluefood.domain.restaurante.RestauranteRepository;
 import com.daniel.bluefood.domain.restaurante.SearchFilter;
 import com.daniel.bluefood.util.SecurityUtils;
 
 @Controller
 @RequestMapping(path = "/cliente")
 public class ClienteController {
-	
+
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	private ClienteService clienteService;
-	
+
 	@Autowired
 	private CategoriaRestauranteRepository categoriaRestauranteRepository;
-	
+
 	@Autowired
 	private RestauranteService restauranteService;
 
+	@Autowired
+	private RestauranteRepository restauranteRepository;
+
 	@GetMapping(path = "/home")
 	public String home(Model model) {
-		
+
 		List<CategoriaRestaurante> categorias = categoriaRestauranteRepository.findAll(Sort.by("nome"));
-		
+
 		model.addAttribute("categorias", categorias);
 		model.addAttribute("searchFilter", new SearchFilter());
-		
+
 		return "cliente-home";
 	}
-	
+
 	@GetMapping(path = "/edit")
 	public String edit(Model model) {
-		
+
 		Integer clienteId = SecurityUtils.loggedCliente().getId();
-		
+
 		Cliente cliente = clienteRepository.findById(clienteId).orElseThrow();
-		
+
 		model.addAttribute("cliente", cliente);
-		
+
 		ControllerHelper.isEditMode(model, true);
-		
+
 		return "cliente-cadastro";
 	}
-	
+
 	@PostMapping(path = "/save")
-	public String save(
-			@ModelAttribute("cliente") @Valid Cliente cliente, 
-			Errors errors, 
-			Model model) {
-		
+	public String save(@ModelAttribute("cliente") @Valid Cliente cliente, Errors errors, Model model) {
+
 		if (!errors.hasErrors()) {
 			try {
 				clienteService.saveCliente(cliente);
@@ -82,26 +83,37 @@ public class ClienteController {
 			}
 		}
 		ControllerHelper.isEditMode(model, true);
-		
+
 		return "cliente-cadastro";
 	}
-	
+
 	@GetMapping(path = "/search")
 	public String search(@ModelAttribute("searchFilter") SearchFilter filter,
-			@RequestParam(value = "cmd", required = false) String command,
-			Model model
-			) {
-		
+			@RequestParam(value = "cmd", required = false) String command, Model model) {
+
 		filter.processFilter(command);
-		
+
 		List<Restaurante> restaurantes = restauranteService.serach(filter);
-		
+
 		model.addAttribute("restaurantes", restaurantes);
-		
+
 		ControllerHelper.addCategoriasToRequest(categoriaRestauranteRepository, model);
-		
+
 		model.addAttribute("searchFilter", filter);
-		
+		model.addAttribute("cep", SecurityUtils.loggedCliente().getCep());
+
 		return "cliente-busca";
+	}
+
+	@GetMapping(path = "/restaurante")
+	public String viewRestaurante(
+			@RequestParam("restauranteId") Integer restauranteId, 
+			Model model) {
+
+		Restaurante restaurante = restauranteRepository.findById(restauranteId).orElseThrow();
+		model.addAttribute("restaurante", restaurante);
+		model.addAttribute("cep", SecurityUtils.loggedCliente().getCep());
+
+		return "cliente-restaurante";
 	}
 }
