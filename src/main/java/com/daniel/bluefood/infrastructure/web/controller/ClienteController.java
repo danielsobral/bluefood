@@ -22,6 +22,8 @@ import com.daniel.bluefood.domain.cliente.Cliente;
 import com.daniel.bluefood.domain.cliente.ClienteRepository;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestaurante;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestauranteRepository;
+import com.daniel.bluefood.domain.restaurante.ItemCardapio;
+import com.daniel.bluefood.domain.restaurante.ItemCardapioRepository;
 import com.daniel.bluefood.domain.restaurante.Restaurante;
 import com.daniel.bluefood.domain.restaurante.RestauranteRepository;
 import com.daniel.bluefood.domain.restaurante.SearchFilter;
@@ -45,6 +47,9 @@ public class ClienteController {
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	private ItemCardapioRepository itemCardapioRepository;
 
 	@GetMapping(path = "/home")
 	public String home(Model model) {
@@ -113,7 +118,19 @@ public class ClienteController {
 		Restaurante restaurante = restauranteRepository.findById(restauranteId).orElseThrow();
 		model.addAttribute("restaurante", restaurante);
 		model.addAttribute("cep", SecurityUtils.loggedCliente().getCep());
-
+		
+		List<String> categorias = itemCardapioRepository.findCategorias(restauranteId);
+		model.addAttribute("categorias", categorias);
+		
+		List<ItemCardapio> itensCardapioDestaque;
+		List<ItemCardapio> itensCardapioNaoDestaque;
+		
+		itensCardapioDestaque = itemCardapioRepository.findByRestaurante_IdAndDestaqueOrderByNome(restauranteId, true);
+		itensCardapioNaoDestaque = itemCardapioRepository.findByRestaurante_IdAndDestaqueOrderByNome(restauranteId, false);
+		
+		model.addAttribute("itensCardapioDestaque", itensCardapioDestaque);
+		model.addAttribute("itensCardapioNaoDestaque", itensCardapioNaoDestaque);
+		
 		return "cliente-restaurante";
 	}
 }
