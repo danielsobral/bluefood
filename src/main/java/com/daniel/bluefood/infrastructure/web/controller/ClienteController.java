@@ -20,6 +20,8 @@ import com.daniel.bluefood.domain.application.service.RestauranteService;
 import com.daniel.bluefood.domain.application.service.ValidationException;
 import com.daniel.bluefood.domain.cliente.Cliente;
 import com.daniel.bluefood.domain.cliente.ClienteRepository;
+import com.daniel.bluefood.domain.pedido.Pedido;
+import com.daniel.bluefood.domain.pedido.PedidoRepository;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestaurante;
 import com.daniel.bluefood.domain.restaurante.CategoriaRestauranteRepository;
 import com.daniel.bluefood.domain.restaurante.ItemCardapio;
@@ -50,6 +52,9 @@ public class ClienteController {
 	
 	@Autowired
 	private ItemCardapioRepository itemCardapioRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
 
 	@GetMapping(path = "/home")
 	public String home(Model model) {
@@ -58,6 +63,9 @@ public class ClienteController {
 
 		model.addAttribute("categorias", categorias);
 		model.addAttribute("searchFilter", new SearchFilter());
+		
+		List<Pedido> pedidos = pedidoRepository.listPedidosByCliente(SecurityUtils.loggedCliente().getId());
+		model.addAttribute("pedidos", pedidos);
 
 		return "cliente-home";
 	}

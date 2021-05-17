@@ -91,4 +91,9 @@ public class Pedido implements Serializable {
 	
 	@OneToMany(mappedBy = "id.pedido", fetch = FetchType.EAGER)
 	private Set<ItemPedido> itens;
+	
+	public String getFormattedId() {
+		
+		return String.format("#%04d", id);
+	}
 }
