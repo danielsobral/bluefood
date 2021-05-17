@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.daniel.bluefood.domain.pedido.Carrinho;
+import com.daniel.bluefood.domain.pedido.ItemPedido;
+import com.daniel.bluefood.domain.pedido.Pedido;
+import com.daniel.bluefood.domain.pedido.PedidoRepository;
 import com.daniel.bluefood.domain.pedido.RestauranteDiferenteException;
 import com.daniel.bluefood.domain.restaurante.ItemCardapio;
 import com.daniel.bluefood.domain.restaurante.ItemCardapioRepository;
@@ -22,6 +25,9 @@ public class CarrinhoController {
 	
 	@Autowired
 	private ItemCardapioRepository itemCardapioRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
 	
 	@ModelAttribute("carrinho")
 	public Carrinho carrinho() {
@@ -67,6 +73,23 @@ public class CarrinhoController {
 		if (carrinho.vazio()) {
 			
 			sessionStatus.setComplete();
+		}
+		
+		return "cliente-carrinho";
+	}
+	
+	@GetMapping(path = "/refazerCarrinho")
+	public String refazerCarrinho(
+			@RequestParam("pedidoId") Integer pedidoId,
+			@ModelAttribute("carrinho") Carrinho carrinho,
+			Model model) {
+		
+		Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow();
+		carrinho.limpar();
+		
+		for (ItemPedido itemPedido : pedido.getItens()) {
+			
+			carrinho.adicionarItem(itemPedido);
 		}
 		
 		return "cliente-carrinho";
