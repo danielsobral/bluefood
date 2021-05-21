@@ -13,6 +13,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.daniel.bluefood.domain.pagamento.DadosCartao;
+import com.daniel.bluefood.domain.pagamento.Pagamento;
+import com.daniel.bluefood.domain.pagamento.PagamentoRepository;
 import com.daniel.bluefood.domain.pagamento.StatusPagamento;
 import com.daniel.bluefood.domain.pedido.Carrinho;
 import com.daniel.bluefood.domain.pedido.ItemPedido;
@@ -31,6 +33,9 @@ public class PedidoService {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 
 	@Value("${bluefood.sbpay.url}")
 	private String sbPayUrl;
@@ -40,7 +45,7 @@ public class PedidoService {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(rollbackFor = PagamentoException.class)
-	public Pedido criarEPagar(Carrinho carrinho, String nunumCartao) throws PagamentoException {
+	public Pedido criarEPagar(Carrinho carrinho, String numCartao) throws PagamentoException {
 
 		Pedido pedido = new Pedido();
 
@@ -62,7 +67,7 @@ public class PedidoService {
 		}
 
 		DadosCartao dadosCartao = new DadosCartao();
-		dadosCartao.setNumCartao(nunumCartao);
+		dadosCartao.setNumCartao(numCartao);
 
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("Token", sbPayToken);
@@ -86,6 +91,12 @@ public class PedidoService {
 
 			throw new PagamentoException(statusPagamento.getDescricao());
 		}
+		
+		Pagamento pagamento = new Pagamento();
+		pagamento.setData(LocalDateTime.now());
+		pagamento.setPedido(pedido);
+		pagamento.definirNumeroEBandeira(numCartao);
+		pagamentoRepository.save(pagamento);
 
 		return pedido;
 	}

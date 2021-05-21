@@ -9,7 +9,9 @@
 			</div>
 			<div>
 				<h1>SEU PEDIDO</h1>
+				<a th:href="@{/cliente/restaurante/} + '?restauranteId=' + ${carrinho.restaurante.id}">
 				<img th:if="${carrinho.restaurante != null}" th:src="@{/images/logotipo/} + ${carrinho.restaurante.logotipo}" id="imgRestauranteBusca">
+				</a>
 			</div>
 			<br><br>
 			
