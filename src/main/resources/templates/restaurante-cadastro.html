@@ -3,16 +3,16 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 	
+	<body>
 		<div layout:fragment="content">
-
 			<div>
 				<h1>Cadastro de Restaurante</h1>
 				
 				<div id="mensagemDeSucesso" th:if="${msg != null}">
-					<span th:text="${msg}"></span>
-				</div><br>
+					<span th:text="${msg}"></span><br />
+				</div>
 				
-				<form method="post" th:object="${restaurante}" th:action="${!editMode} ? @{/public/restaurante/save} : @{/restaurante/save}" enctype="multipart/form-data">
+				<form method="post" th:object="${restaurante}" th:action="${editMode} ? @{/restaurante/save} : @{/public/restaurante/save}" enctype="multipart/form-data">
 					<fieldset>
 						<input type="hidden" th:field="*{id}">
 						<label for="nome">Nome do Restaurante: </label><br>	
@@ -47,12 +47,13 @@
 							<span th:errors="*{categorias}"></span>
 						</div><br>
 						
-						<label for="logotipo">Logotipo: </label><br>	
-						<input type="file" id="logotipo" name="logotipo" placeholder="Selecionar..." th:field="*{logotipoFile}" th:classappend="${#fields.hasErrors('logotipoFile') ? 'inputError' : ''}"><br><br>
-						<div id="mensagemDeErro" th:if="${#fields.hasErrors('logotipoFile')}">
-							<span th:errors="*{logotipoFile}"></span>
-						</div><br>
-						
+						<div th:if="${!editMode}"> <!-- não permite mudança no logo na edição -->
+							<label for="logotipo">Logotipo: </label><br>	
+							<input type="file" id="logotipo" name="logotipo" placeholder="Selecionar..." th:field="*{logotipoFile}" th:classappend="${#fields.hasErrors('logotipoFile') ? 'inputError' : ''}"><br><br>
+							<div id="mensagemDeErro" th:if="${#fields.hasErrors('logotipoFile')}">
+								<span th:errors="*{logotipoFile}"></span>
+							</div><br>
+						</div>
 						<label for="taxaEntrega">Taxa de Entrega: </label><br>	
 						<input type="text" id="taxaEntrega" name="taxaEntrega" placeholder="Taxa..." th:field="*{taxaEntrega}" th:classappend="${#fields.hasErrors('taxaEntrega') ? 'inputError' : ''}" onkeydown="return isNumberKey(event);"><br><br>
 						<div id="mensagemDeErro" th:if="${#fields.hasErrors('taxaEntrega')}">
@@ -72,7 +73,8 @@
 								<span th:errors="*{senha}"></span>
 							</div><br>
 						</div>
-				
+						<input type="hidden" name="senha" value="*" th:if="${editMode}" />
+								
 						<input type="submit" th:value="${!editMode} ? 'Cadastrar' : 'Alterar' ">
 					</fieldset>
 				</form>
